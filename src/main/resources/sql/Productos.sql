@@ -13,7 +13,7 @@ CREATE TABLE productos (
         nombre  VARCHAR(100) NOT NULL,
 
     -- Precio unitario de venta. No puede ser negativo.
-        precio  NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
+        precio  DOUBLE PRECISION NOT NULL CHECK (precio >= 0),
 
     -- Stock disponible del producto. No puede ser negativo.
         cantidad    INT NOT NULL CHECK (cantidad >= 0),
