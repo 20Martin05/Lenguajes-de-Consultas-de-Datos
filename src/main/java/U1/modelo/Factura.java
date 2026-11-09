@@ -25,6 +25,10 @@ public class Factura {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "metodo_pago_id", nullable = false)
+    private MetodoDePago metodoDePago;
+
     @Column(nullable = false, unique = true, length = 30)
     private String numero;
 

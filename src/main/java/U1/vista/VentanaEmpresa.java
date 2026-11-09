@@ -19,12 +19,14 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     private final CategoriaControlador Ccontrolador;
     private final FacturaControlador Fcontrolador;
     private final ClientesControlador CLcontrolador;
+    private final MetodoDePagoControlador MPcontrolador;
 
     public VentanaEmpresa() {
         this.Pcontrolador = new ProductosControlador(this);
         this.Ccontrolador = new CategoriaControlador(this);
         this.Fcontrolador = new FacturaControlador(this);
         this.CLcontrolador = new ClientesControlador(this);
+        this.MPcontrolador = new MetodoDePagoControlador(this);
 
         setTitle("Gestión de Productos - Corporación Favorita");
         setContentPane(PanelPrincipal);
@@ -36,8 +38,7 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     }
 
     public void iniciar() {
-        cargarCategorias();
-        cargarEstados();
+        cargarCombos();
         configurarEventos();
 
         Pcontrolador.Plistar();
@@ -45,13 +46,17 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
 
         Ccontrolador.Clistar();
 
-        Fcontrolador.cargarCombos();
+        Fcontrolador.cargarCombosFactura();
         Fcontrolador.Flistar();
         configurarSorter(tbl_FFacturas);
 
         CLcontrolador.CLlistar();
         CLcontrolador.cargarComboFacturas();
         configurarSorter(tbl_CLClientes);
+
+        MPcontrolador.cargarCombosMetodoDePago();
+        MPcontrolador.MPlistar();
+        configurarSorter(tbl_MPMetodoDePago);
 
         configurarEventosTablas();
     }
@@ -74,29 +79,45 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     }
 
     private void recargarTodo() {
-        Fcontrolador.cargarCombos();
+        Fcontrolador.cargarCombosFactura();
         CLcontrolador.cargarComboFacturas();
         Pcontrolador.Plistar();
         Ccontrolador.Clistar();
         Fcontrolador.Flistar();
         CLcontrolador.CLlistar();
+        MPcontrolador.cargarCombosMetodoDePago();
+        MPcontrolador.MPlistar();
+        configurarSorter(tbl_MPMetodoDePago);
     }
 
-    private void cargarCategorias() {
+    private void cargarCombos() {
         String[] cats = {"LÁCTEOS", "CARNES", "FRUTAS", "VERDURAS", "GRANOS", "PANADERÍA", "BEBIDAS", "ENLATADOS", "SNACKS"};
+        String[] pagos = {"", "EFECTIVO", "TARJETA", "TRANSFERENCIA"};
+        String[] estados = {"ACTIVO", "INACTIVO"};
+        String[] ests = {"DISPONIBLE", "AGOTADO"};
         cmb_CNombre.removeAllItems();
         cmb_PCategoria.removeAllItems();
         for (String c : cats) {
             cmb_CNombre.addItem(c);
             cmb_PCategoria.addItem(c);
         }
-    }
 
-    private void cargarEstados() {
         cmb_CEstado.removeAllItems();
-        cmb_CEstado.addItem("DISPONIBLE");
-        cmb_CEstado.addItem("AGOTADO");
-        cmb_CEstado.setSelectedIndex(0);
+        for (String est : ests) {
+            cmb_CEstado.addItem(est);
+        }
+
+        cmb_MPPago.removeAllItems();
+        for (String pago : pagos) {
+            cmb_MPPago.addItem(pago);
+        }
+        cmb_MPPago.setSelectedIndex(0);
+
+        cmb_MPEstado.removeAllItems();
+        for (String estado : estados) {
+            cmb_MPEstado.addItem(estado);
+        }
+        cmb_MPEstado.setSelectedIndex(0);
     }
 
     private void agregarBuscador(JTextField campo, Consumer<String> accion) {
@@ -131,6 +152,17 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         btn_CLActualizar.addActionListener(e -> { CLcontrolador.CLactualizar(); recargarTodo(); });
         btn_CLEliminar.addActionListener(e -> { CLcontrolador.CLeliminar(); recargarTodo(); });
         btn_CLLimpiar.addActionListener(e -> CLcontrolador.CLlimpiar());
+
+        // MÉTODO DE PAGO
+        btn_MPGuardar.addActionListener(e -> { MPcontrolador.MPguardar(); recargarTodo(); });
+        btn_MPActualizar.addActionListener(e -> { MPcontrolador.MPactualizar(); recargarTodo(); });
+        btn_MPEliminar.addActionListener(e -> { MPcontrolador.MPeliminar(); recargarTodo(); });
+        btn_MPLimpiar.addActionListener(e -> MPcontrolador.MPlimpiar());
+
+        agregarBuscador(txt_MPBuscador, t -> {
+            if (t.isEmpty()) MPcontrolador.MPlistar();
+            else MPcontrolador.MPbuscarYMostrar(t);
+        });
 
         // BUSCADORES
         agregarBuscador(txt_PBuscador, t -> { if (t.isEmpty()) Pcontrolador.Plistar(); else Pcontrolador.PbuscarYMostrar(t); });
@@ -185,6 +217,13 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Fcontrolador.Fcargar();
+            }
+        });
+
+        tbl_MPMetodoDePago.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                MPcontrolador.MPcargar();
             }
         });
     }

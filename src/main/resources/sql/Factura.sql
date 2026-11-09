@@ -26,10 +26,18 @@ CREATE TABLE facturas (
     -- Identificador del cliente asociado a la factura.
     cliente_id  INT NOT NULL,
 
+    -- Identificador del método de pago utilizado en la factura.
+    metodo_pago_id INT NOT NULL,
+
     -- Relaciona cada factura con un cliente.
-     CONSTRAINT fk_factura_cliente
+    CONSTRAINT fk_factura_cliente
         FOREIGN KEY (cliente_id)
-            REFERENCES clientes(id)
+            REFERENCES clientes(id),
+
+    -- Relaciona cada factura con un método de pago.
+    CONSTRAINT fk_factura_metodo_pago
+        FOREIGN KEY (metodo_pago_id)
+            REFERENCES metodo_de_pago(id)
 );
 
 -- Consulta de comprobación del contenido de la tabla.

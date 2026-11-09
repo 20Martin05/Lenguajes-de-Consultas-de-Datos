@@ -44,17 +44,19 @@ public class FacturaControlador {
         vista.tbl_FFacturas.setModel(m);
     }
 
-    public void cargarCombos() {
+    public void cargarCombosFactura() {
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             if (vista.cmb_FCliente != null) {
                 vista.cmb_FCliente.removeAllItems();
-                for (Cliente c : em.createQuery("FROM Cliente", Cliente.class).getResultList()) {
+                for (Cliente c : em.createQuery("FROM Cliente", Cliente.class
+                ).getResultList()) {
                     vista.cmb_FCliente.addItem(c.getNombre());
                 }
             }
             if (vista.cmb_FProducto != null) {
                 vista.cmb_FProducto.removeAllItems();
-                for (Productos p : em.createQuery("FROM Productos", Productos.class).getResultList()) {
+                for (Productos p : em.createQuery("FROM Productos", Productos.class
+                ).getResultList()) {
                     vista.cmb_FProducto.addItem(p.getNombre());
                 }
             }
@@ -89,8 +91,6 @@ public class FacturaControlador {
         }
     }
 
-    // Nota: la factura se trata como de una sola línea. Si necesitas varias,
-    // hay que cambiar la lógica para actualizar o crear cada detalle.
     public void Factualizar() {
         int id = idSeleccionado();
         if (id == -1) return;
