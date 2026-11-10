@@ -8,6 +8,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -113,62 +116,68 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         });
     }
 
+    public void mostrarResultado(JTextPane panel, String texto, String... etiquetas) {
+        panel.setText(texto);
+        StyledDocument documento = panel.getStyledDocument();
+        SimpleAttributeSet negrita = new SimpleAttributeSet();
+        StyleConstants.setBold(negrita, true);
+
+        for (String etiqueta : etiquetas) {
+            int inicio = texto.indexOf(etiqueta);
+            while (inicio >= 0) {
+                documento.setCharacterAttributes(inicio, etiqueta.length(), negrita, false);
+                inicio = texto.indexOf(etiqueta, inicio + etiqueta.length());
+            }
+        }
+    }
+
     private void configurarEventos() {
-        conectarConsultas();
 
         // PRODUCTOS
-
         // CATEGORIA
-
         // FACTURA
-
+        btn_FTodas.addActionListener(e -> {
+            Fcontrolador.FacturasTotal();
+        });
+        btn_FTotalVentas.addActionListener(e -> {
+            Fcontrolador.VentasTotal();
+        });
+        btn_FMayorTotal.addActionListener(e -> {
+            Fcontrolador.MaximoYMinimo();
+        });
+        btn_FFechaConsulta.addActionListener(e -> {
+            Fcontrolador.FacturasPorFecha();
+        });
+        btn_FClienteConsulta.addActionListener(e -> {
+            Fcontrolador.FacturasPorCliente();
+        });
         // CLIENTE
-
+        btn_CLTodos.addActionListener(e -> {
+            CLcontrolador.ClientesTotal();
+        });
+        btn_CLFacturaConsulta.addActionListener(e -> {
+            CLcontrolador.ClientesConFactura();
+        });
+        btn_CLNombreConsulta.addActionListener(e -> {
+            CLcontrolador.ClientesPorNombre();
+        });
+        btn_CLApellidoConsulta.addActionListener(e -> {
+            CLcontrolador.ClientesPorApellido();
+        });
         // MÉTODO DE PAGO
 
+        // BUSCADORES
+        agregarBuscador(txt_PBuscador, t -> {
+            if (t.isEmpty()) Pcontrolador.Plistar();
+            else Pcontrolador.PbuscarYMostrar(t); });
+        agregarBuscador(txt_FBuscador, t -> {
+            if (t.isEmpty()) Fcontrolador.Flistar();
+            else Fcontrolador.FbuscarYMostrar(t); });
+        agregarBuscador(txt_CLBuscador, t -> {
+            if (t.isEmpty()) CLcontrolador.CLlistar();
+            else CLcontrolador.CLbuscarYMostrar(t); });
         agregarBuscador(txt_MPBuscador, t -> {
             if (t.isEmpty()) MPcontrolador.MPlistar();
-            else MPcontrolador.MPbuscarYMostrar(t);
-        });
-
-        // BUSCADORES
-        agregarBuscador(txt_PBuscador, t -> { if (t.isEmpty()) Pcontrolador.Plistar(); else Pcontrolador.PbuscarYMostrar(t); });
-        agregarBuscador(txt_FBuscador, t -> { if (t.isEmpty()) Fcontrolador.Flistar(); else Fcontrolador.FbuscarYMostrar(t); });
-        agregarBuscador(txt_CLBuscador, t -> { if (t.isEmpty()) CLcontrolador.CLlistar(); else CLcontrolador.CLbuscarYMostrar(t); });
+            else MPcontrolador.MPbuscarYMostrar(t); });
     }
-
-    private void conectarConsultas() {
-        conectar(btn_CLTodos, tbl_JPQLClientes);
-        conectar(btn_CLNombreConsulta, tbl_JPQLClientes);
-        conectar(btn_CLApellidoConsulta, tbl_JPQLClientes);
-        conectar(btn_CLFacturaConsulta, tbl_JPQLClientes);
-
-        conectar(btn_CTodas, tbl_JPQLCategoria);
-        conectar(btn_CActivas, tbl_JPQLCategoria);
-        conectar(btn_CInactivas, tbl_JPQLCategoria);
-        conectar(btn_CProductos, tbl_JPQLCategoria);
-
-        conectar(btn_PTodos, tbl_JPQLProductos);
-        conectar(btn_PCategoriaConsulta, tbl_JPQLProductos);
-        conectar(btn_PAgotados, tbl_JPQLProductos);
-        conectar(btn_PMayorPrecio, tbl_JPQLProductos);
-        conectar(btn_PExistencias, tbl_JPQLProductos);
-
-        conectar(btn_FTodas, tbl_JPQLFactura);
-        conectar(btn_FClienteConsulta, tbl_JPQLFactura);
-        conectar(btn_FMayorTotal, tbl_JPQLFactura);
-        conectar(btn_FFechaConsulta, tbl_JPQLFactura);
-        conectar(btn_FTotalVentas, tbl_JPQLFactura);
-
-        conectar(btn_MPTodos, tbl_JPQLMetodoDePago);
-        conectar(btn_MPEfectivo, tbl_JPQLMetodoDePago);
-        conectar(btn_MPTarjeta, tbl_JPQLMetodoDePago);
-        conectar(btn_MPTransferencia, tbl_JPQLMetodoDePago);
-        conectar(btn_MPEstadoConsulta, tbl_JPQLMetodoDePago);
-    }
-
-    private void conectar(JButton boton, JTextPane resultado) {
-        boton.addActionListener(e -> resultado.setText(boton.getText()));
-    }
-
 }
