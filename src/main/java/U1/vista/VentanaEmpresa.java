@@ -8,8 +8,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -58,7 +56,6 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         MPcontrolador.MPlistar();
         configurarSorter(tbl_MPMetodoDePago);
 
-        configurarEventosTablas();
     }
 
     /**
@@ -76,18 +73,6 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
             }
         }));
         tabla.setRowSorter(sorter);
-    }
-
-    private void recargarTodo() {
-        Fcontrolador.cargarCombosFactura();
-        CLcontrolador.cargarComboFacturas();
-        Pcontrolador.Plistar();
-        Ccontrolador.Clistar();
-        Fcontrolador.Flistar();
-        CLcontrolador.CLlistar();
-        MPcontrolador.cargarCombosMetodoDePago();
-        MPcontrolador.MPlistar();
-        configurarSorter(tbl_MPMetodoDePago);
     }
 
     private void cargarCombos() {
@@ -129,35 +114,17 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     }
 
     private void configurarEventos() {
+        conectarConsultas();
+
         // PRODUCTOS
-        btn_PGuardar.addActionListener(e -> { Pcontrolador.Pguardar(); recargarTodo(); });
-        btn_PActualizar.addActionListener(e -> { Pcontrolador.Pactualizar(); recargarTodo(); });
-        btn_PEliminar.addActionListener(e -> { Pcontrolador.Peliminar(); recargarTodo(); });
-        btn_PLimpiar.addActionListener(e -> Pcontrolador.Plimpiar());
 
         // CATEGORIA
-        btn_CGuardar.addActionListener(e -> { Ccontrolador.Cguardar(); recargarTodo(); });
-        btn_CActualizar.addActionListener(e -> { Ccontrolador.Cactualizar(); recargarTodo(); });
-        btn_CEliminar.addActionListener(e -> { Ccontrolador.Celiminar(); recargarTodo(); });
-        btn_CLimpiar.addActionListener(e -> Ccontrolador.Climpiar());
 
         // FACTURA
-        btn_FGuardar.addActionListener(e -> { Fcontrolador.Fguardar(); recargarTodo(); });
-        btn_FActualizar.addActionListener(e -> { Fcontrolador.Factualizar(); recargarTodo(); });
-        btn_FEliminar.addActionListener(e -> { Fcontrolador.Feliminar(); recargarTodo(); });
-        btn_FLimpiar.addActionListener(e -> Fcontrolador.Flimpiar());
 
         // CLIENTE
-        btn_CLGuardar.addActionListener(e -> { CLcontrolador.CLguardar(); recargarTodo(); });
-        btn_CLActualizar.addActionListener(e -> { CLcontrolador.CLactualizar(); recargarTodo(); });
-        btn_CLEliminar.addActionListener(e -> { CLcontrolador.CLeliminar(); recargarTodo(); });
-        btn_CLLimpiar.addActionListener(e -> CLcontrolador.CLlimpiar());
 
         // MÉTODO DE PAGO
-        btn_MPGuardar.addActionListener(e -> { MPcontrolador.MPguardar(); recargarTodo(); });
-        btn_MPActualizar.addActionListener(e -> { MPcontrolador.MPactualizar(); recargarTodo(); });
-        btn_MPEliminar.addActionListener(e -> { MPcontrolador.MPeliminar(); recargarTodo(); });
-        btn_MPLimpiar.addActionListener(e -> MPcontrolador.MPlimpiar());
 
         agregarBuscador(txt_MPBuscador, t -> {
             if (t.isEmpty()) MPcontrolador.MPlistar();
@@ -170,66 +137,38 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         agregarBuscador(txt_CLBuscador, t -> { if (t.isEmpty()) CLcontrolador.CLlistar(); else CLcontrolador.CLbuscarYMostrar(t); });
     }
 
-    private void configurarEventosTablas() {
-        tbl_PProductos.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int filaVista = tbl_PProductos.getSelectedRow();
-                if (filaVista >= 0) {
-                    int fila = tbl_PProductos.convertRowIndexToModel(filaVista);
-                    txt_PNombre.setText(valorCelda(tbl_PProductos, fila, 1));
-                    txt_PPrecio.setText(valorCelda(tbl_PProductos, fila, 2));
-                    txt_PCantidad.setText(valorCelda(tbl_PProductos, fila, 3));
-                }
-            }
-        });
+    private void conectarConsultas() {
+        conectar(btn_CLTodos, tbl_JPQLClientes);
+        conectar(btn_CLNombreConsulta, tbl_JPQLClientes);
+        conectar(btn_CLApellidoConsulta, tbl_JPQLClientes);
+        conectar(btn_CLFacturaConsulta, tbl_JPQLClientes);
 
-        tbl_CCategorias.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int filaVista = tbl_CCategorias.getSelectedRow();
-                if (filaVista >= 0) {
-                    int fila = tbl_CCategorias.convertRowIndexToModel(filaVista);
-                    boolean estado = Boolean.parseBoolean(valorCelda(tbl_CCategorias, fila, 3));
-                    cmb_CEstado.setSelectedIndex(estado ? 0 : 1);
-                    cmb_CNombre.setSelectedItem(valorCelda(tbl_CCategorias, fila, 1));
-                    txt_CDescripcion.setText(valorCelda(tbl_CCategorias, fila, 2));
-                }
-            }
-        });
+        conectar(btn_CTodas, tbl_JPQLCategoria);
+        conectar(btn_CActivas, tbl_JPQLCategoria);
+        conectar(btn_CInactivas, tbl_JPQLCategoria);
+        conectar(btn_CProductos, tbl_JPQLCategoria);
 
-        tbl_CLClientes.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int filaVista = tbl_CLClientes.getSelectedRow();
-                if (filaVista >= 0) {
-                    int fila = tbl_CLClientes.convertRowIndexToModel(filaVista);
-                    txt_CLNombre.setText(valorCelda(tbl_CLClientes, fila, 1));
-                    txt_CLApellido.setText(valorCelda(tbl_CLClientes, fila, 2));
-                    txt_CLCedula.setText(valorCelda(tbl_CLClientes, fila, 3));
-                    txt_CLTelefono.setText(valorCelda(tbl_CLClientes, fila, 4));
-                    txt_CLCorreo.setText(valorCelda(tbl_CLClientes, fila, 5));
-                }
-            }
-        });
+        conectar(btn_PTodos, tbl_JPQLProductos);
+        conectar(btn_PCategoriaConsulta, tbl_JPQLProductos);
+        conectar(btn_PAgotados, tbl_JPQLProductos);
+        conectar(btn_PMayorPrecio, tbl_JPQLProductos);
+        conectar(btn_PExistencias, tbl_JPQLProductos);
 
-        tbl_FFacturas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Fcontrolador.Fcargar();
-            }
-        });
+        conectar(btn_FTodas, tbl_JPQLFactura);
+        conectar(btn_FClienteConsulta, tbl_JPQLFactura);
+        conectar(btn_FMayorTotal, tbl_JPQLFactura);
+        conectar(btn_FFechaConsulta, tbl_JPQLFactura);
+        conectar(btn_FTotalVentas, tbl_JPQLFactura);
 
-        tbl_MPMetodoDePago.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                MPcontrolador.MPcargar();
-            }
-        });
+        conectar(btn_MPTodos, tbl_JPQLMetodoDePago);
+        conectar(btn_MPEfectivo, tbl_JPQLMetodoDePago);
+        conectar(btn_MPTarjeta, tbl_JPQLMetodoDePago);
+        conectar(btn_MPTransferencia, tbl_JPQLMetodoDePago);
+        conectar(btn_MPEstadoConsulta, tbl_JPQLMetodoDePago);
     }
 
-    private String valorCelda(JTable tabla, int fila, int col) {
-        Object val = tabla.getValueAt(fila, col);
-        return val != null ? val.toString() : "";
+    private void conectar(JButton boton, JTextPane resultado) {
+        boton.addActionListener(e -> resultado.setText(boton.getText()));
     }
+
 }
