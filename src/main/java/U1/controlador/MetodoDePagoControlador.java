@@ -85,8 +85,4 @@ public class MetodoDePagoControlador {
         llenar(modelo, MPbuscarPorPago(texto));
         vista.tbl_MPMetodoDePago.setModel(modelo);
     }
-
-
-    @FunctionalInterface
-
 }

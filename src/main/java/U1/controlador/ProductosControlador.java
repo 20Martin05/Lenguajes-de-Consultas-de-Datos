@@ -17,13 +17,13 @@ public class ProductosControlador {
 
 
     private DefaultTableModel crearModelo() {
-        return new DefaultTableModel(new String[]{"ID", "Nombre", "Precio", "Cantidad", "categoria_id"}, 0);
+        return new DefaultTableModel(new String[]{"ID", "Categoria ID", "Nombre", "Precio", "Cantidad"}, 0);
     }
 
     private void llenar(DefaultTableModel modelo, List<Productos> lista) {
         for (Productos p : lista) {
             Integer catId = p.getCategoriaRelacion() == null ? null : p.getCategoriaRelacion().getId();
-            modelo.addRow(new Object[]{p.getId(), p.getNombre(), p.getPrecio(), p.getCantidad(), catId});
+            modelo.addRow(new Object[]{p.getId(), catId, p.getNombre(), p.getPrecio(), p.getCantidad()});
         }
     }
 
