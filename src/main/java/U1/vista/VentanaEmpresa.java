@@ -11,6 +11,8 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -59,6 +61,42 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         MPcontrolador.MPlistar();
         configurarSorter(tbl_MPMetodoDePago);
 
+        configurarCalculoAutomaticoFactura();
+    }
+
+    private void configurarCalculoAutomaticoFactura() {
+        txt_FImpuesto.setEditable(false);
+        txt_FTotal.setEditable(false);
+
+        txt_FSubTotal.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { calcularTotales(); }
+            public void removeUpdate(DocumentEvent e) { calcularTotales(); }
+            public void changedUpdate(DocumentEvent e) { calcularTotales(); }
+
+            private void calcularTotales() {
+                String texto = txt_FSubTotal.getText().trim();
+                if (texto.isEmpty()) {
+                    txt_FImpuesto.setText("");
+                    txt_FTotal.setText("");
+                    return;
+                }
+                try {
+                    BigDecimal subtotal = new BigDecimal(texto);
+                    if (subtotal.compareTo(BigDecimal.ZERO) < 0) {
+                        txt_FImpuesto.setText("");
+                        txt_FTotal.setText("");
+                        return;
+                    }
+                    BigDecimal impuesto = subtotal.multiply(new BigDecimal("0.15")).setScale(2, RoundingMode.HALF_UP);
+                    BigDecimal total = subtotal.add(impuesto).setScale(2, RoundingMode.HALF_UP);
+                    txt_FImpuesto.setText(impuesto.toPlainString());
+                    txt_FTotal.setText(total.toPlainString());
+                } catch (NumberFormatException ex) {
+                    txt_FImpuesto.setText("");
+                    txt_FTotal.setText("");
+                }
+            }
+        });
     }
 
     /**
@@ -134,7 +172,25 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     private void configurarEventos() {
 
         // PRODUCTOS
+        btn_PTodos.addActionListener(e -> {
+            Pcontrolador.ProductosTotal();
+        });
+        btn_PMayorPrecio.addActionListener(e -> {
+            Pcontrolador.MaximoYMinimoPrecio();
+        });
+        btn_PExistencias.addActionListener(e -> {
+            Pcontrolador.MaximoYMinimoCantidad();
+        });
         // CATEGORIA
+        btn_CTodas.addActionListener(e -> {
+            Ccontrolador.CategoriasTotal();
+        });
+        btn_CActivas.addActionListener(e -> {
+            Ccontrolador.CategoriasActivas();
+        });
+        btn_CProductos.addActionListener(e -> {
+            Ccontrolador.CategoriasConProductos();
+        });
         // FACTURA
         btn_FTodas.addActionListener(e -> {
             Fcontrolador.FacturasTotal();
@@ -143,7 +199,7 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
             Fcontrolador.VentasTotal();
         });
         btn_FMayorTotal.addActionListener(e -> {
-            Fcontrolador.MaximoYMinimo();
+            Fcontrolador.MaximoYMinimoTotal();
         });
         btn_FFechaConsulta.addActionListener(e -> {
             Fcontrolador.FacturasPorFecha();
@@ -165,6 +221,18 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
             CLcontrolador.ClientesPorApellido();
         });
         // MÉTODO DE PAGO
+        btn_MPTodos.addActionListener(e -> {
+            MPcontrolador.MetodosPagoTotal();
+        });
+        btn_MPEfectivo.addActionListener(e -> {
+            MPcontrolador.MetodosPagoPorTipo("EFECTIVO");
+        });
+        btn_MPTarjeta.addActionListener(e -> {
+            MPcontrolador.MetodosPagoPorTipo("TARJETA");
+        });
+        btn_MPTransferencia.addActionListener(e -> {
+            MPcontrolador.MetodosPagoPorTipo("TRANSFERENCIA");
+        });
 
         // BUSCADORES
         agregarBuscador(txt_PBuscador, t -> {
