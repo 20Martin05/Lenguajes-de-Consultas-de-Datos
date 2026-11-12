@@ -37,8 +37,10 @@ public class ClientesControlador {
 
     public void CLlistar() {
         DefaultTableModel modelo = crearModelo();
+        vista.tbl_CLClientes.setRowSorter(null);
+        vista.tbl_CLClientes.setAutoCreateColumnsFromModel(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
-            llenar(modelo, em.createQuery("FROM Cliente", Cliente.class).getResultList());
+            llenar(modelo, em.createQuery("FROM Cliente c ORDER BY c.id ASC", Cliente.class).getResultList());
         }
         vista.tbl_CLClientes.setModel(modelo);
     }
@@ -56,7 +58,7 @@ public class ClientesControlador {
     public List<Cliente> CLbuscarPorNombre(String nombre) {
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             return em.createQuery(
-                            "SELECT c FROM Cliente c WHERE LOWER(c.nombre) LIKE LOWER(:nombre) ORDER BY c.nombre",
+                            "SELECT c FROM Cliente c WHERE LOWER(c.nombre) LIKE LOWER(:nombre) ORDER BY c.id ASC",
                             Cliente.class)
                     .setParameter("nombre", "%" + nombre + "%")
                     .getResultList();
@@ -65,6 +67,8 @@ public class ClientesControlador {
 
     public void CLbuscarYMostrar(String texto) {
         DefaultTableModel modelo = crearModelo();
+        vista.tbl_CLClientes.setRowSorter(null);
+        vista.tbl_CLClientes.setAutoCreateColumnsFromModel(true);
         llenar(modelo, CLbuscarPorNombre(texto));
         vista.tbl_CLClientes.setModel(modelo);
     }
@@ -75,11 +79,8 @@ public class ClientesControlador {
             List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c", Cliente.class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Cliente c : clientes) {
-                resultado.append("CLIENTE ")
-                        .append(contador++)
-                        .append(" - ID: ")
+                resultado.append(" - ID: ")
                         .append(c.getId())
                         .append(" - NOMBRE: ")
                         .append(c.getNombre())
@@ -94,7 +95,7 @@ public class ClientesControlador {
                         .append("\n");
 
             }
-            mostrarResultado(resultado.toString(), "CLIENTE", "ID", "NOMBRE", "APELLIDO", "CEDULA", "TELÉFONO", "CORREO");
+            mostrarResultado(resultado.toString(), "ID", "NOMBRE", "APELLIDO", "CEDULA", "TELÉFONO", "CORREO");
         }
     }
 
@@ -102,22 +103,23 @@ public class ClientesControlador {
         vista.tbl_JPQLClientes.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             List<Object[]> clientes = em.createQuery(
-                    "SELECT DISTINCT c.id, f.id, c.nombre, c.apellido FROM Cliente c " +
+                    "SELECT DISTINCT c.id, f.numero, c.nombre, c.apellido FROM Cliente c " +
                             "JOIN c.facturas f ORDER BY c.id ASC",
                     Object[].class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Object[] c : clientes) {
-                resultado.append("Cliente ")
-                        .append(contador++)
-                        .append(" - FACTURA ID: ").append(c[1])
-                        .append(" - ID: ").append(c[0])
-                        .append(" - NOMBRE: ").append(c[2])
-                        .append(" - APELLIDO: ").append(c[3])
+                resultado.append(" - ID: ")
+                        .append(c[0])
+                        .append(" - FACTURA: ")
+                        .append(c[1])
+                        .append(" - NOMBRE: ")
+                        .append(c[2])
+                        .append(" - APELLIDO: ")
+                        .append(c[3])
                         .append("\n");
             }
-            mostrarResultado(resultado.toString(), "Cliente", "FACTURA ID", "ID:", "NOMBRE:", "APELLIDO:");
+            mostrarResultado(resultado.toString(),   "ID:", "FACTURA:", "NOMBRE:", "APELLIDO:");
         }
     }
 
@@ -129,17 +131,14 @@ public class ClientesControlador {
                             "ORDER BY c.id ASC", Object[].class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Object[] c : clientes) {
-                resultado.append("Cliente ")
-                        .append(contador++)
-                        .append(" - ID: ")
+                resultado.append(" - ID: ")
                         .append(c[0])
                         .append(" - NOMBRE: ")
                         .append(c[1])
                         .append("\n");
             }
-            mostrarResultado(resultado.toString(), "Cliente", "ID:", "NOMBRE:");
+            mostrarResultado(resultado.toString(),  "ID:", "NOMBRE:");
         }
     }
 
@@ -151,17 +150,14 @@ public class ClientesControlador {
                             "ORDER BY c.id ASC", Object[].class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Object[] c : clientes) {
-                resultado.append("Cliente ")
-                        .append(contador++)
-                        .append(" - ID: ")
+                resultado.append(" - ID: ")
                         .append(c[0])
                         .append(" - APELLIDO: ")
                         .append(c[1])
                         .append("\n");
             }
-            mostrarResultado(resultado.toString(), "Cliente", "ID:", "APELLIDO:");
+            mostrarResultado(resultado.toString(),  "ID:", "APELLIDO:");
         }
     }
 

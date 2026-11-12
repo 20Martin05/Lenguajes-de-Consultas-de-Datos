@@ -39,8 +39,9 @@ public class FacturaControlador {
     public void Flistar() {
         vista.tbl_FFacturas.setRowSorter(null);
         DefaultTableModel m = crearModelo();
+        vista.tbl_FFacturas.setAutoCreateColumnsFromModel(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
-            llenar(m, em.createQuery("FROM Factura", Factura.class).getResultList());
+            llenar(m, em.createQuery("FROM Factura f ORDER BY f.id ASC", Factura.class).getResultList());
         }
         vista.tbl_FFacturas.setModel(m);
     }
@@ -78,6 +79,7 @@ public class FacturaControlador {
     public void FbuscarYMostrar(String texto) {
         vista.tbl_FFacturas.setRowSorter(null);
         DefaultTableModel modelo = crearModelo();
+        vista.tbl_FFacturas.setAutoCreateColumnsFromModel(true);
         llenar(modelo, FbuscarPorCliente(texto));
         vista.tbl_FFacturas.setModel(modelo);
     }
@@ -86,15 +88,14 @@ public class FacturaControlador {
         vista.tbl_FFacturas.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             List<Factura> facturas = em.createQuery(
-                    "SELECT f FROM Factura f ORDER BY f.id ASC", Factura.class)
+                    "SELECT f FROM Factura f JOIN f.cliente ORDER BY f.id ASC", Factura.class)
                     .getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Factura f : facturas) {
-                resultado.append("Factura ")
-                        .append(contador++)
-                        .append(" - ID: ")
+                resultado.append(" - ID: ")
                         .append(f.getId())
+                        .append(" - Cliente: ")
+                        .append(f.getCliente().getNombre())
                         .append(" - Número: ")
                         .append(f.getNumero())
                         .append(" - Fecha: ")
@@ -104,50 +105,49 @@ public class FacturaControlador {
                         .append("\n");
                 
             }
-            mostrarResultado(resultado.toString(), "Factura", "ID:", "Número:", "Fecha:", "Total:");
+            mostrarResultado(resultado.toString(),  "ID:", "Cliente", "Número:", "Fecha:", "Total:");
         }
     }
     public void VentasTotal() {
         vista.tbl_JPQLFactura.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             List<Object[]> ventas = em.createQuery(
-                    "SELECT f.subtotal, f.impuesto, f.total FROM Factura f ORDER BY f.id ASC",
+                    "SELECT f.id, f.subtotal, f.impuesto, f.total FROM Factura f ORDER BY f.id ASC",
                     Object[].class
             ).getResultList();
             BigDecimal sumaVentas = em.createQuery(
                     "SELECT COALESCE(SUM(f.total), 0) FROM Factura f", BigDecimal.class
             ).getSingleResult();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Object[] f : ventas) {
-                resultado.append("Factura ")
-                        .append(contador++)
-                        .append(" - SUBTOTAL: ")
+                resultado.append(" - ID: ")
                         .append(f[0])
-                        .append(" - IMPUESTO: ")
+                        .append(" - SUBTOTAL: ")
                         .append(f[1])
-                        .append(" - TOTAL: ")
+                        .append(" - IMPUESTO: ")
                         .append(f[2])
+                        .append(" - TOTAL: ")
+                        .append(f[3])
                         .append("\n");
             }
             resultado.append("\nSuma total de ventas: ")
                     .append(sumaVentas);
-            mostrarResultado(resultado.toString(), "Factura", "SUBTOTAL:", "IMPUESTO:", "TOTAL:",
+            mostrarResultado(resultado.toString(),  "ID", "SUBTOTAL:", "IMPUESTO:", "TOTAL:",
                     "Suma total de ventas:");
         }
     }
 
-    public void MaximoYMinimo() {
+    public void MaximoYMinimoTotal() {
         vista.tbl_JPQLFactura.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
-            Object[] resultados = em.createQuery(
+            Object[] total = em.createQuery(
                     "SELECT MAX(f.total), MIN(f.total) FROM Factura f", Object[].class
             ).getSingleResult();
             StringBuilder resultado = new StringBuilder();
             resultado.append("Máximo de ventas: ")
-                    .append(resultados[0])
+                    .append(total[0])
                     .append("\nMínimo de ventas: ")
-                    .append(resultados[1]);
+                    .append(total[1]);
             mostrarResultado(resultado.toString(), "Máximo de ventas:", "Mínimo de ventas:");
         }
     }
@@ -155,18 +155,18 @@ public class FacturaControlador {
         vista.tbl_JPQLFactura.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             List<Object[]> Fecha = em.createQuery(
-                    "SELECT f.fecha FROM Factura f ORDER BY f.id ASC", Object[].class
+                    "SELECT f.id, f.fecha FROM Factura f ORDER BY f.id ASC", Object[].class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
             int contador = 1;
             for (Object[] f : Fecha) {
-                resultado.append("Fecha ")
-                        .append(contador++)
-                        .append(": ")
+                resultado.append("- ID:")
                         .append(f[0])
+                        .append(" - Fecha: ")
+                        .append(f[1])
                         .append("\n");
             }
-            mostrarResultado(resultado.toString(), "Fecha");
+            mostrarResultado(resultado.toString(), "ID", "Fecha");
         }
     }
 
@@ -174,20 +174,19 @@ public class FacturaControlador {
         vista.tbl_JPQLFactura.setEnabled(true);
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             List<Object[]> Clientes = em.createQuery(
-                    "SELECT DISTINCT c.id, c.nombre FROM Cliente c ORDER BY c.id ASC", Object[].class
+                    "SELECT DISTINCT c.id, c.nombre, c.apellido FROM Cliente c ORDER BY c.id ASC", Object[].class
             ).getResultList();
             StringBuilder resultado = new StringBuilder();
-            int contador = 1;
             for (Object[] c : Clientes) {
-                resultado.append("Cliente ")
-                        .append(contador++)
-                        .append(" - ID: ")
+                resultado.append(" - ID: ")
                         .append(c[0])
                         .append(" - Nombre: ")
                         .append(c[1])
+                        .append(" - Apellido: ")
+                        .append(c[2])
                         .append("\n");
             }
-            mostrarResultado(resultado.toString(), "Cliente", "ID:", "Nombre:");
+            mostrarResultado(resultado.toString(),  "ID:", "Nombre:",  "Apellido:");
         }
     }
 
