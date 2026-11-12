@@ -33,6 +33,23 @@ public class FacturaDetalle {
     @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
+    public FacturaDetalle() {}
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public Factura getFactura() { return factura; }
+    public void setFactura(Factura factura) { this.factura = factura; }
+
+    public Productos getProducto() { return producto; }
+    public void setProducto(Productos producto) { this.producto = producto; }
+
+    public int getCantidad() { return cantidad; }
+    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
+
+    public BigDecimal getPrecioUnitario() { return precioUnitario; }
+    public void setPrecioUnitario(BigDecimal precioUnitario) { this.precioUnitario = precioUnitario; }
+
     @Override
     public String toString() {
         return "FacturaDetalle{id=" + id + ", cantidad=" + cantidad + "}";
