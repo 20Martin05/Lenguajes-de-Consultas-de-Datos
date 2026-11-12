@@ -86,6 +86,14 @@
                     <compilerArgs>
                         <arg>-Xlint:-unchecked</arg>
                     </compilerArgs>
+                    <!-- Configuración obligatoria para Lombok en Java moderno -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.48</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

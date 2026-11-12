@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "metodo_de_pago")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class MetodoDePago {
 
@@ -30,8 +32,6 @@ public class MetodoDePago {
 
     @OneToMany(mappedBy = "metodoDePago")
     private Set<Factura> facturas = new HashSet<>();
-
-    public MetodoDePago() {}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

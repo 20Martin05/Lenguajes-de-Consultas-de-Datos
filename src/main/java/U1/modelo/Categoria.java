@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "categorias")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Categoria {
 
@@ -30,17 +32,6 @@ public class Categoria {
 
     @OneToMany(mappedBy = "categoriaRelacion")
     private Set<Productos> productos = new HashSet<>();
-
-    public Categoria() {
-
-    }
-
-    public Categoria(int id, String nombre, String descripcion, boolean estado) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.estado = estado;
-    }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

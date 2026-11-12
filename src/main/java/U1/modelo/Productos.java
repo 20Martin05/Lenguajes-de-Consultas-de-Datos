@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "productos")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Productos {
 
@@ -34,8 +36,6 @@ public class Productos {
 
     @OneToMany(mappedBy = "producto")
     private List<FacturaDetalle> detalles = new ArrayList<>();
-
-    public Productos() {}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

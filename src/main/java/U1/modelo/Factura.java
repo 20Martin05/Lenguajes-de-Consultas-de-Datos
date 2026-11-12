@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "facturas")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Factura {
 
@@ -46,8 +48,6 @@ public class Factura {
 
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FacturaDetalle> detalles = new ArrayList<>();
-
-    public Factura() {}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

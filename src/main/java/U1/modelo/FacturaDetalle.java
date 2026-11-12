@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
         uniqueConstraints = @UniqueConstraint(columnNames = {"factura_id", "producto_id"}))
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class FacturaDetalle {
 
@@ -32,8 +34,6 @@ public class FacturaDetalle {
 
     @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
-
-    public FacturaDetalle() {}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

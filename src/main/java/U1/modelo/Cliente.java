@@ -1,6 +1,7 @@
 package U1.modelo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "clientes")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Cliente {
 
@@ -36,8 +38,6 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente")
     private Set<Factura> facturas = new HashSet<>();
-
-    public Cliente() {}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

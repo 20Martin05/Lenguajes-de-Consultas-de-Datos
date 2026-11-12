@@ -66,12 +66,7 @@ public class VentanaEmpresaUI extends JFrame {
     public final JComboBox cmb_MPEstado;
     public final JComboBox cmb_MPPago;
     public final JTextPane tbl_JPQLMetodoDePago;
-    public final JButton btn_MPTodos, btn_MPEfectivo, btn_MPTarjeta, btn_MPTransferencia, btn_MPEstadoConsulta;
-    private final JButton consultarButton;
-    private final JButton button2;
-    private final JButton button3;
-    private final JButton button4;
-    private final JButton button5;
+    public final JButton btn_MPTodos, btn_MPEfectivo, btn_MPTarjeta, btn_MPTransferencia;
 
     public VentanaEmpresaUI() {
         {
@@ -329,9 +324,6 @@ public class VentanaEmpresaUI extends JFrame {
             btn_MPTransferencia = new JButton();
             btn_MPTransferencia.setText("Pagos por transferencia");
             panel5.add(btn_MPTransferencia, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            btn_MPEstadoConsulta = new JButton();
-            btn_MPEstadoConsulta.setText("Pagos por estado");
-            panel5.add(btn_MPEstadoConsulta, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JScrollPane scrollPane9 = new JScrollPane();
             panel5.add(scrollPane9, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_MPMetodoDePago = new JTable();
@@ -352,21 +344,6 @@ public class VentanaEmpresaUI extends JFrame {
             panel5.add(scrollPane10, new GridConstraints(0, 3, 7, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLMetodoDePago = new JTextPane();
             scrollPane10.setViewportView(tbl_JPQLMetodoDePago);
-            consultarButton = new JButton();
-            consultarButton.setText("Consultar");
-            panel5.add(consultarButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            button2 = new JButton();
-            button2.setText("Button");
-            panel5.add(button2, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            button3 = new JButton();
-            button3.setText("Button");
-            panel5.add(button3, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            button5 = new JButton();
-            button5.setText("Button");
-            panel5.add(button5, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            button4 = new JButton();
-            button4.setText("Button");
-            panel5.add(button4, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         }
     }
 
