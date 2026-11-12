@@ -1,20 +1,30 @@
 -- ==========================================
 -- TABLA: CATEGORÍAS
 -- ==========================================
--- Elimina la tabla anterior para permitir recrear el esquema desde cero.
 DROP TABLE IF EXISTS categorias CASCADE;
 
--- Define la estructura utilizada por la entidad JPA Categoria.
 CREATE TABLE categorias (
-    -- Identificador autoincremental y clave primaria.
     id SERIAL PRIMARY KEY,
-    -- Nombre de la categoría.
     nombre VARCHAR(100) NOT NULL,
-    -- Descripción de la categoría.
     descripcion VARCHAR(255),
-    -- Indica si la categoría se encuentra activa.
     estado BOOLEAN NOT NULL DEFAULT TRUE
 );
 
--- Consulta de comprobación del contenido de la tabla.
+INSERT INTO categorias (id, nombre, descripcion, estado) VALUES
+    (1, 'LÁCTEOS', 'Productos lácteos y derivados', TRUE),
+    (2, 'CARNES', 'Carnes rojas, blancas y embutidos', TRUE),
+    (3, 'FRUTAS', 'Frutas frescas y seleccionadas', TRUE),
+    (4, 'VERDURAS', 'Verduras y hortalizas frescas', TRUE),
+    (5, 'GRANOS', 'Granos secos y legumbres', TRUE),
+    (6, 'PANADERÍA', 'Panes, pasteles y repostería', TRUE),
+    (7, 'BEBIDAS', 'Bebidas refrescantes y jugos', TRUE),
+    (8, 'ENLATADOS', 'Alimentos en conserva y enlatados', TRUE),
+    (9, 'SNACKS', 'Bocaditos y snacks variados', TRUE);
+
+SELECT setval(
+    pg_get_serial_sequence('categorias', 'id'),
+    (SELECT MAX(id) FROM categorias),
+    true
+);
+
 SELECT * FROM categorias;
