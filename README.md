@@ -105,6 +105,9 @@ Relaciones principales:
 
 ![Pestaña Factura](src/main/resources/images/pestañas/Pestaña%20Factura.png)
 
+**Pestaña Metodo de Pago**
+![Pestaña Método de Pago](src/main/resources/images/pestañas/Pestaña%20Metodo%20De%20Pago.png)
+
 ## 🚀 Instrucciones de Uso
 
 ### 1. Clonar el proyecto
