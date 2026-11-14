@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 public class VentanaEmpresa extends VentanaEmpresaUI {
 
@@ -169,6 +170,76 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         }
     }
 
+    private String valorCelda(JTable tabla, int filaModelo, int columna) {
+        Object val = tabla.getModel().getValueAt(filaModelo, columna);
+        return val == null ? "" : val.toString();
+    }
+
+    private void alSeleccionarFila(JTable tabla, IntConsumer accionFilaModelo) {
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
+            int filaVista = tabla.getSelectedRow();
+            if (filaVista < 0) return;
+            int filaModelo = tabla.convertRowIndexToModel(filaVista);
+            accionFilaModelo.accept(filaModelo);
+        });
+    }
+
+    private void configurarSeleccionTablas() {
+        // CLIENTE -> 0:ID, 1:Nombre, 2:Apellido, 3:Cédula, 4:Teléfono, 5:Correo
+        alSeleccionarFila(tbl_CLClientes, fila -> {
+            txt_CLNombre.setText(valorCelda(tbl_CLClientes, fila, 1));
+            txt_CLApellido.setText(valorCelda(tbl_CLClientes, fila, 2));
+            txt_CLCedula.setText(valorCelda(tbl_CLClientes, fila, 3));
+            txt_CLTelefono.setText(valorCelda(tbl_CLClientes, fila, 4));
+            txt_CLCorreo.setText(valorCelda(tbl_CLClientes, fila, 5));
+        });
+
+        // CATEGORIA -> 0:ID, 1:Nombre, 2:Descripción, 3:Estado
+        alSeleccionarFila(tbl_CCategorias, fila -> {
+            cmb_CNombre.setSelectedItem(valorCelda(tbl_CCategorias, fila, 1));
+            txt_CDescripcion.setText(valorCelda(tbl_CCategorias, fila, 2));
+            boolean activo = Boolean.parseBoolean(valorCelda(tbl_CCategorias, fila, 3));
+            cmb_CEstado.setSelectedItem(activo ? "DISPONIBLE" : "AGOTADO");
+        });
+
+        // PRODUCTOS -> 0:ID, 1:Categoria ID, 2:Nombre, 3:Precio, 4:Cantidad
+        alSeleccionarFila(tbl_PProductos, fila -> {
+            txt_PNombre.setText(valorCelda(tbl_PProductos, fila, 2));
+            txt_PPrecio.setText(valorCelda(tbl_PProductos, fila, 3));
+            txt_PCantidad.setText(valorCelda(tbl_PProductos, fila, 4));
+
+            String catIdStr = valorCelda(tbl_PProductos, fila, 1);
+            if (!catIdStr.isEmpty()) {
+                try {
+                    int idx = Integer.parseInt(catIdStr) - 1;
+                    if (idx >= 0 && idx < cmb_PCategoria.getItemCount()) {
+                        cmb_PCategoria.setSelectedIndex(idx);
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        });
+
+        // FACTURA -> 0:ID, 1:Cliente ID, 2:Cliente, 3:Número, 4:Fecha, 5:Subtotal, 6:Impuesto, 7:Total
+        alSeleccionarFila(tbl_FFacturas, fila -> {
+            cmb_FCliente.setSelectedItem(valorCelda(tbl_FFacturas, fila, 2));
+            txt_FNumero.setText(valorCelda(tbl_FFacturas, fila, 3));
+            txt_FFecha.setText(valorCelda(tbl_FFacturas, fila, 4));
+            txt_FSubTotal.setText(valorCelda(tbl_FFacturas, fila, 5));
+            txt_FImpuesto.setText(valorCelda(tbl_FFacturas, fila, 6));
+            txt_FTotal.setText(valorCelda(tbl_FFacturas, fila, 7));
+        });
+
+        // MÉTODO DE PAGO -> 0:ID, 1:Factura ID, 2:Cliente ID, 3:Pago, 4:Descripción, 5:Estado
+        alSeleccionarFila(tbl_MPMetodoDePago, fila -> {
+            cmb_MPPago.setSelectedItem(valorCelda(tbl_MPMetodoDePago, fila, 3));
+            txt_MPDescripcion.setText(valorCelda(tbl_MPMetodoDePago, fila, 4));
+            boolean activo = Boolean.parseBoolean(valorCelda(tbl_MPMetodoDePago, fila, 5));
+            cmb_MPEstado.setSelectedItem(activo ? "ACTIVO" : "INACTIVO");
+        });
+    }
+
     private void configurarEventos() {
 
         // PRODUCTOS
@@ -237,15 +308,22 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
         // BUSCADORES
         agregarBuscador(txt_PBuscador, t -> {
             if (t.isEmpty()) Pcontrolador.Plistar();
-            else Pcontrolador.PbuscarYMostrar(t); });
+            else Pcontrolador.PbuscarYMostrar(t);
+        });
         agregarBuscador(txt_FBuscador, t -> {
             if (t.isEmpty()) Fcontrolador.Flistar();
-            else Fcontrolador.FbuscarYMostrar(t); });
+            else Fcontrolador.FbuscarYMostrar(t);
+        });
         agregarBuscador(txt_CLBuscador, t -> {
             if (t.isEmpty()) CLcontrolador.CLlistar();
-            else CLcontrolador.CLbuscarYMostrar(t); });
+            else CLcontrolador.CLbuscarYMostrar(t);
+        });
         agregarBuscador(txt_MPBuscador, t -> {
             if (t.isEmpty()) MPcontrolador.MPlistar();
-            else MPcontrolador.MPbuscarYMostrar(t); });
+            else MPcontrolador.MPbuscarYMostrar(t);
+        });
+
+        // SELECCIÓN DE FILAS EN TABLAS
+        configurarSeleccionTablas();
     }
 }
