@@ -50,7 +50,7 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
 
         Ccontrolador.Clistar();
 
-        Fcontrolador.cargarCombosFactura();
+        Fcontrolador.cargarCombos();
         Fcontrolador.Flistar();
         configurarSorter(tbl_FFacturas);
 
@@ -115,6 +115,15 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
             }
         }));
         tabla.setRowSorter(sorter);
+    }
+
+    private void recargarTodo() {
+        Fcontrolador.cargarCombos();
+        CLcontrolador.cargarComboFacturas();
+        Pcontrolador.Plistar();
+        Ccontrolador.Clistar();
+        Fcontrolador.Flistar();
+        CLcontrolador.CLlistar();
     }
 
     private void cargarCombos() {
@@ -243,67 +252,53 @@ public class VentanaEmpresa extends VentanaEmpresaUI {
     private void configurarEventos() {
 
         // PRODUCTOS
-        btn_PTodos.addActionListener(e -> {
-            Pcontrolador.ProductosTotal();
-        });
-        btn_PMayorPrecio.addActionListener(e -> {
-            Pcontrolador.MaximoYMinimoPrecio();
-        });
-        btn_PExistencias.addActionListener(e -> {
-            Pcontrolador.MaximoYMinimoCantidad();
-        });
+        btn_PGuardar.addActionListener(e -> { Pcontrolador.Pguardar(); recargarTodo(); });
+        btn_PActualizar.addActionListener(e -> { Pcontrolador.Pactualizar(); recargarTodo(); });
+        btn_PEliminar.addActionListener(e -> { Pcontrolador.Peliminar(); recargarTodo(); });
+        btn_PLimpiar.addActionListener(e -> Pcontrolador.Plimpiar());
+        btn_PTodos.addActionListener(e -> { Pcontrolador.ProductosTotal(); });
+        btn_PMayorPrecio.addActionListener(e -> { Pcontrolador.MaximoYMinimoPrecio(); });
+        btn_PExistencias.addActionListener(e -> { Pcontrolador.MaximoYMinimoCantidad(); });
+
         // CATEGORIA
-        btn_CTodas.addActionListener(e -> {
-            Ccontrolador.CategoriasTotal();
-        });
-        btn_CActivas.addActionListener(e -> {
-            Ccontrolador.CategoriasActivas();
-        });
-        btn_CProductos.addActionListener(e -> {
-            Ccontrolador.CategoriasConProductos();
-        });
+        btn_CGuardar.addActionListener(e -> { Ccontrolador.Cguardar(); recargarTodo(); });
+        btn_CActualizar.addActionListener(e -> { Ccontrolador.Cactualizar(); recargarTodo(); });
+        btn_CEliminar.addActionListener(e -> { Ccontrolador.Celiminar(); recargarTodo(); });
+        btn_CLimpiar.addActionListener(e -> Ccontrolador.Climpiar());
+        btn_CTodas.addActionListener(e -> { Ccontrolador.CategoriasTotal(); });
+        btn_CActivas.addActionListener(e -> { Ccontrolador.CategoriasActivas(); });
+        btn_CProductos.addActionListener(e -> { Ccontrolador.CategoriasConProductos(); });
+
         // FACTURA
-        btn_FTodas.addActionListener(e -> {
-            Fcontrolador.FacturasTotal();
-        });
-        btn_FTotalVentas.addActionListener(e -> {
-            Fcontrolador.VentasTotal();
-        });
-        btn_FMayorTotal.addActionListener(e -> {
-            Fcontrolador.MaximoYMinimoTotal();
-        });
-        btn_FFechaConsulta.addActionListener(e -> {
-            Fcontrolador.FacturasPorFecha();
-        });
-        btn_FClienteConsulta.addActionListener(e -> {
-            Fcontrolador.FacturasPorCliente();
-        });
+        btn_FGuardar.addActionListener(e -> { Fcontrolador.Fguardar(); recargarTodo(); });
+        btn_FActualizar.addActionListener(e -> { Fcontrolador.Factualizar(); recargarTodo(); });
+        btn_FEliminar.addActionListener(e -> { Fcontrolador.Feliminar(); recargarTodo(); });
+        btn_FLimpiar.addActionListener(e -> Fcontrolador.Flimpiar());
+        btn_FTodas.addActionListener(e -> { Fcontrolador.FacturasTotal(); });
+        btn_FTotalVentas.addActionListener(e -> { Fcontrolador.VentasTotal(); });
+        btn_FMayorTotal.addActionListener(e -> { Fcontrolador.MaximoYMinimoTotal(); });
+        btn_FFechaConsulta.addActionListener(e -> { Fcontrolador.FacturasPorFecha(); });
+        btn_FClienteConsulta.addActionListener(e -> { Fcontrolador.FacturasPorCliente(); });
+
         // CLIENTE
-        btn_CLTodos.addActionListener(e -> {
-            CLcontrolador.ClientesTotal();
-        });
-        btn_CLFacturaConsulta.addActionListener(e -> {
-            CLcontrolador.ClientesConFactura();
-        });
-        btn_CLNombreConsulta.addActionListener(e -> {
-            CLcontrolador.ClientesPorNombre();
-        });
-        btn_CLApellidoConsulta.addActionListener(e -> {
-            CLcontrolador.ClientesPorApellido();
-        });
+        btn_CLGuardar.addActionListener(e -> { CLcontrolador.CLguardar(); recargarTodo(); });
+        btn_CLActualizar.addActionListener(e -> { CLcontrolador.CLactualizar(); recargarTodo(); });
+        btn_CLEliminar.addActionListener(e -> { CLcontrolador.CLeliminar(); recargarTodo(); });
+        btn_CLLimpiar.addActionListener(e -> CLcontrolador.CLlimpiar());
+        btn_CLTodos.addActionListener(e -> { CLcontrolador.ClientesTotal(); });
+        btn_CLFacturaConsulta.addActionListener(e -> { CLcontrolador.ClientesConFactura(); });
+        btn_CLNombreConsulta.addActionListener(e -> { CLcontrolador.ClientesPorNombre(); });
+        btn_CLApellidoConsulta.addActionListener(e -> { CLcontrolador.ClientesPorApellido(); });
+
         // MÉTODO DE PAGO
-        btn_MPTodos.addActionListener(e -> {
-            MPcontrolador.MetodosPagoTotal();
-        });
-        btn_MPEfectivo.addActionListener(e -> {
-            MPcontrolador.MetodosPagoPorTipo("EFECTIVO");
-        });
-        btn_MPTarjeta.addActionListener(e -> {
-            MPcontrolador.MetodosPagoPorTipo("TARJETA");
-        });
-        btn_MPTransferencia.addActionListener(e -> {
-            MPcontrolador.MetodosPagoPorTipo("TRANSFERENCIA");
-        });
+        btn_MPGuardar.addActionListener(e -> { MPcontrolador.MPguardar(); recargarTodo(); });
+        btn_MPActualizar.addActionListener(e -> { MPcontrolador.MPactualizar(); recargarTodo(); });
+        btn_MPEliminar.addActionListener(e -> { MPcontrolador.MPeliminar(); recargarTodo(); });
+        btn_MPLimpiar.addActionListener(e -> MPcontrolador.MPlimpiar());
+        btn_MPTodos.addActionListener(e -> { MPcontrolador.MetodosPagoTotal(); });
+        btn_MPEfectivo.addActionListener(e -> { MPcontrolador.MetodosPagoPorTipo("EFECTIVO"); });
+        btn_MPTarjeta.addActionListener(e -> { MPcontrolador.MetodosPagoPorTipo("TARJETA"); });
+        btn_MPTransferencia.addActionListener(e -> { MPcontrolador.MetodosPagoPorTipo("TRANSFERENCIA"); });
 
         // BUSCADORES
         agregarBuscador(txt_PBuscador, t -> {

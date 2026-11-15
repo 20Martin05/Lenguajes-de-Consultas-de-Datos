@@ -4,9 +4,12 @@ import U1.vista.VentanaEmpresa;
 import U1.util.ConexionJPA;
 import U1.modelo.*;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public class FacturaControlador {
@@ -46,7 +49,7 @@ public class FacturaControlador {
         vista.tbl_FFacturas.setModel(m);
     }
 
-    public void cargarCombosFactura() {
+    public void cargarCombos() {
         try (EntityManager em = ConexionJPA.crearEntityManager()) {
             if (vista.cmb_FCliente != null) {
                 vista.cmb_FCliente.removeAllItems();
@@ -82,6 +85,170 @@ public class FacturaControlador {
         vista.tbl_FFacturas.setAutoCreateColumnsFromModel(true);
         llenar(modelo, FbuscarPorCliente(texto));
         vista.tbl_FFacturas.setModel(modelo);
+    }
+
+    public void Fguardar() {
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Factura f = new Factura();
+            leerCabecera(em, f);
+            em.persist(f);
+
+            tx.commit();
+            JOptionPane.showMessageDialog(vista, "Factura guardada con éxito");
+            Flistar();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo guardar la factura: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    // Nota: la factura se trata como de una sola línea. Si necesitas varias,
+    // hay que cambiar la lógica para actualizar o crear cada detalle.
+    public void Factualizar() {
+        int id = idSeleccionado();
+        if (id == -1) return;
+
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Factura f = em.find(Factura.class, id);
+            if (f == null) throw new IllegalStateException("La factura ya no existe");
+
+            FacturaDetalle detalle = f.getDetalles().isEmpty() ? null : f.getDetalles().get(0);
+            if (detalle != null) {
+                devolverStock(detalle.getProducto(), detalle.getCantidad());
+            }
+
+            tx.commit();
+            JOptionPane.showMessageDialog(vista, "Factura actualizada con éxito");
+            Flistar();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo actualizar la factura: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public void Feliminar() {
+        int id = idSeleccionado();
+        if (id == -1) return;
+
+        if (JOptionPane.showConfirmDialog(vista,
+                "¿Estás seguro de eliminar esta factura? El stock se devolverá.",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Factura f = em.find(Factura.class, id);
+            if (f != null) {
+                for (FacturaDetalle d : f.getDetalles()) {
+                    devolverStock(d.getProducto(), d.getCantidad());
+                }
+                em.remove(f);
+            }
+            tx.commit();
+            JOptionPane.showMessageDialog(vista, "Factura eliminada con éxito");
+            Flistar();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo eliminar la factura: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public void Flimpiar() {
+        vista.txt_FNumero.setText("");
+        vista.txt_FFecha.setText("");
+        vista.txt_FSubTotal.setText("");
+        vista.txt_FImpuesto.setText("");
+        vista.txt_FTotal.setText("");
+    }
+
+    public void Fcargar() {
+        int filaVista = vista.tbl_FFacturas.getSelectedRow();
+        if (filaVista < 0) return;
+        int fila = vista.tbl_FFacturas.convertRowIndexToModel(filaVista);
+
+        vista.txt_FNumero.setText(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 3)));
+        vista.txt_FFecha.setText(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 4)));
+        vista.txt_FSubTotal.setText(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 5)));
+        vista.txt_FImpuesto.setText(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 6)));
+        vista.txt_FTotal.setText(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 7)));
+        vista.cmb_FCliente.setSelectedItem(String.valueOf(vista.tbl_FFacturas.getValueAt(fila, 2)));
+
+        try (EntityManager em = ConexionJPA.crearEntityManager()) {
+            Factura f = em.find(Factura.class, ((Number) vista.tbl_FFacturas.getValueAt(fila, 0)).intValue());
+            if (f != null && !f.getDetalles().isEmpty()) {
+                FacturaDetalle d = f.getDetalles().get(0);
+                vista.cmb_FProducto.setSelectedItem(d.getProducto().getNombre());
+            }
+        }
+    }
+
+    private FacturaDetalle crearDetalle(Factura f, Productos p, int cantidad) {
+        FacturaDetalle linea = new FacturaDetalle();
+        linea.setFactura(f);
+        linea.setProducto(p);
+        linea.setCantidad(cantidad);
+        linea.setPrecioUnitario(BigDecimal.valueOf(p.getPrecio()));
+        return linea;
+    }
+
+    private void leerCabecera(EntityManager em, Factura f) {
+        f.setNumero(vista.txt_FNumero.getText().trim());
+        f.setFecha(LocalDate.parse(vista.txt_FFecha.getText().trim()));
+        f.setSubtotal(new BigDecimal(vista.txt_FSubTotal.getText().trim()));
+        f.setImpuesto(new BigDecimal(vista.txt_FImpuesto.getText().trim()));
+        f.setTotal(new BigDecimal(vista.txt_FTotal.getText().trim()));
+
+        Object clienteSel = vista.cmb_FCliente.getSelectedItem();
+        if (clienteSel == null) throw new IllegalStateException("Selecciona un cliente");
+        Cliente c = em.createQuery("FROM Cliente c WHERE c.nombre = :n", Cliente.class)
+                .setParameter("n", clienteSel.toString())
+                .getResultStream().findFirst()
+                .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
+        f.setCliente(c);
+    }
+
+    private Productos productoSeleccionado(EntityManager em) {
+        Object sel = vista.cmb_FProducto.getSelectedItem();
+        if (sel == null) throw new IllegalStateException("Selecciona un producto");
+        return em.createQuery("FROM Productos p WHERE p.nombre = :n", Productos.class)
+                .setParameter("n", sel.toString())
+                .getResultStream().findFirst()
+                .orElseThrow(() -> new IllegalStateException("Producto no encontrado"));
+    }
+
+
+    private void descontarStock(Productos p, int cantidad) {
+        if (p.getCantidad() < cantidad) {
+            throw new IllegalStateException("Stock insuficiente de " + p.getNombre()
+                    + " (disponible: " + p.getCantidad() + ")");
+        }
+        p.setCantidad(p.getCantidad() - cantidad);
+    }
+
+    private void devolverStock(Productos p, int cantidad) {
+        p.setCantidad(p.getCantidad() + cantidad);
+    }
+
+    private int idSeleccionado() {
+        int filaVista = vista.tbl_FFacturas.getSelectedRow();
+        if (filaVista < 0) {
+            JOptionPane.showMessageDialog(vista, "Selecciona una factura");
+            return -1;
+        }
+        return ((Number) vista.tbl_FFacturas.getValueAt(vista.tbl_FFacturas.convertRowIndexToModel(filaVista), 0)).intValue();
     }
 
     public void FacturasTotal() {

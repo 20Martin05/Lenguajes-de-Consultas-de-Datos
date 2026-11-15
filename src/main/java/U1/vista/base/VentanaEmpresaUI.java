@@ -10,24 +10,34 @@ import java.awt.*;
 public class VentanaEmpresaUI extends JFrame {
     public final JPanel PanelPrincipal;
 
-    //Componentes de PRODUCTOS
+    // Componentes de PRODUCTOS
     public final JTextField txt_PPrecio;
     public final JTextField txt_PCantidad;
     public final JTable tbl_PProductos;
     public final JTextField txt_PNombre;
     public final JTextPane tbl_JPQLProductos;
-    public final JButton btn_PTodos, btn_PMayorPrecio, btn_PExistencias;
+    public final JButton btn_PTodos;
+    public final JButton btn_PMayorPrecio;
+    public final JButton btn_PExistencias;
+    public final JButton btn_PGuardar;
+    public final JButton btn_PActualizar;
+    public final JButton btn_PEliminar;
+    public final JButton btn_PLimpiar;
 
-
-    //Componentes de CATEGORIA
+    // Componentes de CATEGORIA
     public final JTextField txt_CDescripcion;
     public final JTable tbl_CCategorias;
     public final JComboBox cmb_CEstado;
     public final JComboBox cmb_CNombre;
     public final JComboBox cmb_PCategoria;
     public final JTextPane tbl_JPQLCategoria;
-    public final JButton btn_CTodas, btn_CActivas, btn_CProductos;
-
+    public final JButton btn_CTodas;
+    public final JButton btn_CActivas;
+    public final JButton btn_CProductos;
+    public final JButton btn_CGuardar;
+    public final JButton btn_CActualizar;
+    public final JButton btn_CEliminar;
+    public final JButton btn_CLimpiar;
 
     // Componentes de FACTURA
     public final JComboBox cmb_FProducto;
@@ -39,8 +49,17 @@ public class VentanaEmpresaUI extends JFrame {
     public final JTextField txt_FTotal;
     public final JTable tbl_FFacturas;
     public final JTextPane tbl_JPQLFactura;
-    public final JButton btn_FTodas, btn_FClienteConsulta, btn_FMayorTotal, btn_FFechaConsulta, btn_FTotalVentas;
+    public final JButton btn_FTodas;
+    public final JButton btn_FClienteConsulta;
+    public final JButton btn_FMayorTotal;
+    public final JButton btn_FFechaConsulta;
+    public final JButton btn_FTotalVentas;
+    public final JButton btn_FGuardar;
+    public final JButton btn_FActualizar;
+    public final JButton btn_FEliminar;
+    public final JButton btn_FLimpiar;
 
+    // Buscadores
     public final JTextField txt_PBuscador;
     public final JTextField txt_FBuscador;
 
@@ -54,9 +73,16 @@ public class VentanaEmpresaUI extends JFrame {
     public final JTextField txt_CLBuscador;
     public final JComboBox cmb_PRFactura;
     public final JTextPane tbl_JPQLClientes;
-    public final JButton btn_CLTodos, btn_CLNombreConsulta, btn_CLApellidoConsulta, btn_CLFacturaConsulta;
+    public final JButton btn_CLTodos;
+    public final JButton btn_CLNombreConsulta;
+    public final JButton btn_CLApellidoConsulta;
+    public final JButton btn_CLFacturaConsulta;
+    public final JButton btn_CLGuardar;
+    public final JButton btn_CLActualizar;
+    public final JButton btn_CLEliminar;
+    public final JButton btn_CLLimpiar;
 
-    //Componentes de MÉTODO DE PAGO
+    // Componentes de MÉTODO DE PAGO
     public final JComboBox cmb_MPCliente;
     public final JTextField txt_MPDescripcion;
     public final JComboBox cmb_MPFactura;
@@ -65,7 +91,14 @@ public class VentanaEmpresaUI extends JFrame {
     public final JComboBox cmb_MPEstado;
     public final JComboBox cmb_MPPago;
     public final JTextPane tbl_JPQLMetodoDePago;
-    public final JButton btn_MPTodos, btn_MPEfectivo, btn_MPTarjeta, btn_MPTransferencia;
+    public final JButton btn_MPTodos;
+    public final JButton btn_MPEfectivo;
+    public final JButton btn_MPTarjeta;
+    public final JButton btn_MPTransferencia;
+    public final JButton btn_MPGuardar;
+    public final JButton btn_MPActualizar;
+    public final JButton btn_MPEliminar;
+    public final JButton btn_MPLimpiar;
 
     public VentanaEmpresaUI() {
         {
@@ -77,7 +110,7 @@ public class VentanaEmpresaUI extends JFrame {
             final JTabbedPane tabbedPane1 = new JTabbedPane();
             PanelPrincipal.add(tabbedPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
             final JPanel panel1 = new JPanel();
-            panel1.setLayout(new GridLayoutManager(8, 4, new Insets(0, 0, 0, 0), -1, -1));
+            panel1.setLayout(new GridLayoutManager(8, 5, new Insets(0, 0, 0, 0), -1, -1));
             tabbedPane1.addTab("Cliente", panel1);
             final JLabel label1 = new JLabel();
             label1.setText("Nombre");
@@ -122,7 +155,7 @@ public class VentanaEmpresaUI extends JFrame {
             btn_CLTodos.setText("Todos los clientes");
             panel1.add(btn_CLTodos, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JScrollPane scrollPane2 = new JScrollPane();
-            panel1.add(scrollPane2, new GridConstraints(0, 3, 8, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            panel1.add(scrollPane2, new GridConstraints(0, 4, 8, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLClientes = new JTextPane();
             scrollPane2.setViewportView(tbl_JPQLClientes);
             btn_CLNombreConsulta = new JButton();
@@ -134,8 +167,20 @@ public class VentanaEmpresaUI extends JFrame {
             btn_CLFacturaConsulta = new JButton();
             btn_CLFacturaConsulta.setText("Clientes con factura");
             panel1.add(btn_CLFacturaConsulta, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CLGuardar = new JButton();
+            btn_CLGuardar.setText("Guardar");
+            panel1.add(btn_CLGuardar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CLActualizar = new JButton();
+            btn_CLActualizar.setText("Actualizar");
+            panel1.add(btn_CLActualizar, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CLEliminar = new JButton();
+            btn_CLEliminar.setText("Eliminar");
+            panel1.add(btn_CLEliminar, new GridConstraints(4, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CLLimpiar = new JButton();
+            btn_CLLimpiar.setText("Limpiar");
+            panel1.add(btn_CLLimpiar, new GridConstraints(5, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JPanel panel2 = new JPanel();
-            panel2.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
+            panel2.setLayout(new GridLayoutManager(4, 6, new Insets(0, 0, 0, 0), -1, -1));
             tabbedPane1.addTab("Categoria", panel2);
             final JLabel label8 = new JLabel();
             label8.setText("Nombre");
@@ -164,7 +209,7 @@ public class VentanaEmpresaUI extends JFrame {
             cmb_CNombre.setModel(defaultComboBoxModel2);
             panel2.add(cmb_CNombre, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JScrollPane scrollPane4 = new JScrollPane();
-            panel2.add(scrollPane4, new GridConstraints(0, 3, 4, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            panel2.add(scrollPane4, new GridConstraints(0, 5, 4, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLCategoria = new JTextPane();
             scrollPane4.setViewportView(tbl_JPQLCategoria);
             btn_CActivas = new JButton();
@@ -173,8 +218,20 @@ public class VentanaEmpresaUI extends JFrame {
             btn_CProductos = new JButton();
             btn_CProductos.setText("Categorías con productos");
             panel2.add(btn_CProductos, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CGuardar = new JButton();
+            btn_CGuardar.setText("Guardar");
+            panel2.add(btn_CGuardar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CActualizar = new JButton();
+            btn_CActualizar.setText("Actualizar");
+            panel2.add(btn_CActualizar, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CEliminar = new JButton();
+            btn_CEliminar.setText("Eliminar");
+            panel2.add(btn_CEliminar, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_CLimpiar = new JButton();
+            btn_CLimpiar.setText("Limpiar");
+            panel2.add(btn_CLimpiar, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JPanel panel3 = new JPanel();
-            panel3.setLayout(new GridLayoutManager(6, 4, new Insets(0, 0, 0, 0), -1, -1));
+            panel3.setLayout(new GridLayoutManager(6, 5, new Insets(0, 0, 0, 0), -1, -1));
             tabbedPane1.addTab("Productos", panel3);
             final JScrollPane scrollPane5 = new JScrollPane();
             panel3.add(scrollPane5, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -205,7 +262,7 @@ public class VentanaEmpresaUI extends JFrame {
             label15.setText("BUSCAR POR NOMBRE");
             panel3.add(label15, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JScrollPane scrollPane6 = new JScrollPane();
-            panel3.add(scrollPane6, new GridConstraints(0, 3, 6, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            panel3.add(scrollPane6, new GridConstraints(0, 4, 6, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLProductos = new JTextPane();
             scrollPane6.setViewportView(tbl_JPQLProductos);
             txt_PBuscador = new JTextField();
@@ -219,8 +276,20 @@ public class VentanaEmpresaUI extends JFrame {
             btn_PMayorPrecio = new JButton();
             btn_PMayorPrecio.setText("Productos Menor precio y Mayor precio");
             panel3.add(btn_PMayorPrecio, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_PGuardar = new JButton();
+            btn_PGuardar.setText("Guardar");
+            panel3.add(btn_PGuardar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_PActualizar = new JButton();
+            btn_PActualizar.setText("Actualizar");
+            panel3.add(btn_PActualizar, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_PEliminar = new JButton();
+            btn_PEliminar.setText("Eliminar");
+            panel3.add(btn_PEliminar, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_PLimpiar = new JButton();
+            btn_PLimpiar.setText("Limpiar");
+            panel3.add(btn_PLimpiar, new GridConstraints(3, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JPanel panel4 = new JPanel();
-            panel4.setLayout(new GridLayoutManager(9, 4, new Insets(0, 0, 0, 0), -1, -1));
+            panel4.setLayout(new GridLayoutManager(9, 5, new Insets(0, 0, 0, 0), -1, -1));
             tabbedPane1.addTab("Factura", panel4);
             final JLabel label16 = new JLabel();
             label16.setText("Fecha");
@@ -250,7 +319,7 @@ public class VentanaEmpresaUI extends JFrame {
             txt_FBuscador = new JTextField();
             panel4.add(txt_FBuscador, new GridConstraints(8, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
             final JScrollPane scrollPane8 = new JScrollPane();
-            panel4.add(scrollPane8, new GridConstraints(0, 3, 9, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            panel4.add(scrollPane8, new GridConstraints(0, 4, 9, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLFactura = new JTextPane();
             scrollPane8.setViewportView(tbl_JPQLFactura);
             btn_FTotalVentas = new JButton();
@@ -285,8 +354,20 @@ public class VentanaEmpresaUI extends JFrame {
             panel4.add(txt_FTotal, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
             txt_FFecha = new JTextField();
             panel4.add(txt_FFecha, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+            btn_FGuardar = new JButton();
+            btn_FGuardar.setText("Guardar");
+            panel4.add(btn_FGuardar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_FActualizar = new JButton();
+            btn_FActualizar.setText("Actualizar");
+            panel4.add(btn_FActualizar, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_FLimpiar = new JButton();
+            btn_FLimpiar.setText("Limpiar");
+            panel4.add(btn_FLimpiar, new GridConstraints(6, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_FEliminar = new JButton();
+            btn_FEliminar.setText("Eliminar");
+            panel4.add(btn_FEliminar, new GridConstraints(5, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JPanel panel5 = new JPanel();
-            panel5.setLayout(new GridLayoutManager(7, 4, new Insets(0, 0, 0, 0), -1, -1));
+            panel5.setLayout(new GridLayoutManager(7, 5, new Insets(0, 0, 0, 0), -1, -1));
             tabbedPane1.addTab("Metodo de Pago", panel5);
             final JLabel label24 = new JLabel();
             label24.setText("Seleccionar Factura");
@@ -335,9 +416,21 @@ public class VentanaEmpresaUI extends JFrame {
             cmb_MPPago = new JComboBox();
             panel5.add(cmb_MPPago, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
             final JScrollPane scrollPane10 = new JScrollPane();
-            panel5.add(scrollPane10, new GridConstraints(0, 3, 7, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            panel5.add(scrollPane10, new GridConstraints(0, 4, 7, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             tbl_JPQLMetodoDePago = new JTextPane();
             scrollPane10.setViewportView(tbl_JPQLMetodoDePago);
+            btn_MPGuardar = new JButton();
+            btn_MPGuardar.setText("Guardar");
+            panel5.add(btn_MPGuardar, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_MPActualizar = new JButton();
+            btn_MPActualizar.setText("Actualizar");
+            panel5.add(btn_MPActualizar, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_MPEliminar = new JButton();
+            btn_MPEliminar.setText("Eliminar");
+            panel5.add(btn_MPEliminar, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            btn_MPLimpiar = new JButton();
+            btn_MPLimpiar.setText("Limpiar");
+            panel5.add(btn_MPLimpiar, new GridConstraints(3, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         }
     }
 
@@ -354,5 +447,4 @@ public class VentanaEmpresaUI extends JFrame {
                 | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
                 null, null, null, 0, false);
     }
-
 }

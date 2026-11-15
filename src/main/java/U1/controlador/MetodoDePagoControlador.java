@@ -6,7 +6,9 @@ import U1.modelo.MetodoDePago;
 import U1.util.ConexionJPA;
 import U1.vista.VentanaEmpresa;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
@@ -102,6 +104,126 @@ public class MetodoDePagoControlador {
         vista.tbl_MPMetodoDePago.setAutoCreateColumnsFromModel(true);
         llenar(modelo, MPbuscarPorPago(texto));
         vista.tbl_MPMetodoDePago.setModel(modelo);
+    }
+
+    public void MPguardar() {
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            MetodoDePago mp = new MetodoDePago();
+
+            Object pagoObj = vista.cmb_MPPago.getSelectedItem();
+            mp.setPago(pagoObj != null ? pagoObj.toString() : "");
+            mp.setDescripcion(vista.txt_MPDescripcion.getText().trim());
+
+            Object estadoObj = vista.cmb_MPEstado.getSelectedItem();
+            boolean estado = estadoObj != null && estadoObj.toString().equalsIgnoreCase("ACTIVO");
+            mp.setEstado(estado);
+
+            em.persist(mp);
+            tx.commit();
+            JOptionPane.showMessageDialog(vista, "Método de pago guardado con éxito");
+            MPlistar();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo guardar el método de pago: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public void MPactualizar() {
+        int filaVista = vista.tbl_MPMetodoDePago.getSelectedRow();
+        if (filaVista < 0) {
+            JOptionPane.showMessageDialog(vista, "Seleccione un método de pago de la tabla para actualizar.");
+            return;
+        }
+        int filaModelo = vista.tbl_MPMetodoDePago.convertRowIndexToModel(filaVista);
+        Object idObj = vista.tbl_MPMetodoDePago.getModel().getValueAt(filaModelo, 0);
+        if (idObj == null) return;
+
+        int id = Integer.parseInt(idObj.toString());
+
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            MetodoDePago mp = em.find(MetodoDePago.class, id);
+            if (mp != null) {
+                Object pagoObj = vista.cmb_MPPago.getSelectedItem();
+                mp.setPago(pagoObj != null ? pagoObj.toString() : "");
+                mp.setDescripcion(vista.txt_MPDescripcion.getText().trim());
+
+                Object estadoObj = vista.cmb_MPEstado.getSelectedItem();
+                boolean estado = estadoObj != null && estadoObj.toString().equalsIgnoreCase("ACTIVO");
+                mp.setEstado(estado);
+
+                em.merge(mp);
+                tx.commit();
+                JOptionPane.showMessageDialog(vista, "Método de pago actualizado con éxito");
+                MPlistar();
+            }
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo actualizar el método de pago: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public void MPeliminar() {
+        int filaVista = vista.tbl_MPMetodoDePago.getSelectedRow();
+        if (filaVista < 0) {
+            JOptionPane.showMessageDialog(vista, "Seleccione un método de pago de la tabla para eliminar.");
+            return;
+        }
+        int filaModelo = vista.tbl_MPMetodoDePago.convertRowIndexToModel(filaVista);
+        Object idObj = vista.tbl_MPMetodoDePago.getModel().getValueAt(filaModelo, 0);
+        if (idObj == null) return;
+
+        int id = Integer.parseInt(idObj.toString());
+
+        EntityManager em = ConexionJPA.crearEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            MetodoDePago mp = em.find(MetodoDePago.class, id);
+            if (mp != null) {
+                em.remove(mp);
+                tx.commit();
+                JOptionPane.showMessageDialog(vista, "Método de pago eliminado con éxito");
+                MPlistar();
+                MPlimpiar();
+            }
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            JOptionPane.showMessageDialog(vista, "No se pudo eliminar el método de pago: " + e.getMessage());
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public void MPlimpiar() {
+        if (vista.cmb_MPFactura != null && vista.cmb_MPFactura.getItemCount() > 0) {
+            vista.cmb_MPFactura.setSelectedIndex(0);
+        }
+        if (vista.cmb_MPCliente != null && vista.cmb_MPCliente.getItemCount() > 0) {
+            vista.cmb_MPCliente.setSelectedIndex(0);
+        }
+        if (vista.cmb_MPPago != null && vista.cmb_MPPago.getItemCount() > 0) {
+            vista.cmb_MPPago.setSelectedIndex(0);
+        }
+        if (vista.cmb_MPEstado != null && vista.cmb_MPEstado.getItemCount() > 0) {
+            vista.cmb_MPEstado.setSelectedIndex(0);
+        }
+        if (vista.txt_MPDescripcion != null) {
+            vista.txt_MPDescripcion.setText("");
+        }
+        if (vista.txt_MPBuscador != null) {
+            vista.txt_MPBuscador.setText("");
+        }
+        vista.tbl_MPMetodoDePago.clearSelection();
     }
 
     public void MetodosPagoTotal() {
