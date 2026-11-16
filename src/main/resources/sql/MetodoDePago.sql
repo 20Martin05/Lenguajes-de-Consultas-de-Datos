@@ -16,12 +16,6 @@ CREATE TABLE metodo_de_pago (
     estado BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-INSERT INTO metodo_de_pago (id, pago, descripcion, estado) VALUES
-    (1, 'EFECTIVO', 'Pago en efectivo', TRUE),
-    (2, 'TARJETA', 'Pago con tarjeta', TRUE),
-    (3, 'TRANSFERENCIA', 'Transferencia bancaria', TRUE),
-    (4, 'CHEQUE', 'Pago mediante cheque', FALSE);
-
 SELECT setval(
     pg_get_serial_sequence('metodo_de_pago', 'id'),
     (SELECT MAX(id) FROM metodo_de_pago),
